@@ -12,6 +12,10 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'pearofducks/ansible-vim'
+Plugin 'cespare/vim-toml'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline-themes/vim-airline-themes'
+Plugin 'vim-fugitive/vim-fugitive'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -46,20 +50,27 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " " fin Vundle
 
+"set list
+set expandtab
 set softtabstop=2
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 syntax on
-filetype indent on
-set autoindent
-set number
+filetype plugin indent on
+"set autoindent
+" set number
+set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
 "colorscheme apprentice
 set laststatus=2
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 set wildmenu
-set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:$,precedes:«,extends:»
+if has("patch-7.4.710")
+  set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:$,precedes:«,extends:»
+else
+  set listchars=tab:→\ ,nbsp:␣,trail:•,eol:$,precedes:«,extends:»
+endif
 
 "autocmd BufNewFile,BufRead *.json set ft=javascript
 "autocmd BufNewFile,BufRead *.j2 set ft=javascript
@@ -88,3 +99,26 @@ let g:netrw_altv = 1
   "autocmd!
   "autocmd VimEnter * :Vexplore
 "augroup END
+
+"ansible option / https://github.com/chase/vim-ansible-yaml
+"let g:ansible_options = {'ignore_blank_lines': 0}
+"let g:ansible_options = {'documentation_mapping': '<C-K>'}
+
+let g:ansible_unindent_after_newline = 1
+let g:ansible_name_highlight = 'd'
+let g:ansible_extra_keywords_highlight = 1
+
+let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
+
+"map leader key to comma
+let mapleader = ","
+
+nmap <silent> ./ :nohlsearch<CR>
+nmap HF /TABLE^M<80>klv/Object Def^M<80>kdd<CR>
+nnoremap <Leader>q" ciw""<Esc>P
+nnoremap <Leader>q' ciw''<Esc>P
+nnoremap <Leader>qd daW"=substitute(@@,"'\\\|\"","","g")<CR>P
+
+set undofile " Maintain undo history between sessions
+set undodir=~/.vim/undodir
+
